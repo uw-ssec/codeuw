@@ -10,7 +10,7 @@ body:
       description: Who can provide additional details about the task?
       placeholder: ex. netit@uw.edu
     validations:
-      required: false
+      required: true
   - type: textarea
     id: description
     attributes:
@@ -19,9 +19,22 @@ body:
       placeholder: |
         A description of the work to perform. Add enough details for someone unfamiliar with the project 
         to work on the task. For L2 and L3 tasks, breaking them up in 2-3 steps will be helpful.
-      value: "A bug happened!"
     validations:
       required: true
+  - type: input
+    id: repo
+    attributes:
+      label: Code Repository      
+      placeholder: https://github.com/...
+    validations:
+      required: true
+  - type: input
+    id: issue
+    attributes:
+      label: Issue link
+      placeholder: https://github.com/.../issues/#    
+    validations:
+      required: false
   - type: dropdown
     id: level
     attributes:
@@ -43,9 +56,12 @@ body:
         - shell
         - C/C++
         - Javascript/Typescript  
+        - Other (specify in the description)
+    validations:
+      required: true
   - type: textarea
     id: dependencies
     attributes:
       label: Additional dependencies
-      description: Please list any additional requirements for sol
+      description: Please list any additional requirements for working on the task
       placeholder: GPU, docker, aws/azure account, specific OS, etc.        
