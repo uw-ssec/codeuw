@@ -12,6 +12,7 @@ By working on these tasks, students have the opportunity to work with SSEC engin
 - Familiarity with [GitHub](https://github.com):
     - Having a github account
     - Knowledge of basic operations, such as pulling/forking a repo, creating branches, making commits and pushing. 
+    - [This](https://www.dataschool.io/how-to-contribute-on-github/) is a good resource for getting started on GitHub. 
 - Programming experience
     - Fluency in the task's programming language. Most tasks will use `python`, although certain tasks may require other languages.
     - For python, familiarity with virtual environments and package managers such as `venv`, `pip` and `conda`.    
