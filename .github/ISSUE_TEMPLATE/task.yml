@@ -8,7 +8,7 @@ body:
     attributes:
       label: Contact
       description: Who can provide additional details about the task?
-      placeholder: ex. netit@uw.edu
+      placeholder: ex. netid@uw.edu
     validations:
       required: true
   - type: textarea
