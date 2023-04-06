@@ -1,0 +1,24 @@
+# Add/remove 'L1' label if issue contains the words 'L1'
+L1:
+  - 'L1'
+
+L2:
+  - 'L2'
+
+L3:
+  - 'L3'  
+
+Python:
+  - python
+
+Shell:
+  - shell
+
+C/C++:
+  - C/C++
+
+JS/TS:        
+  - Javascript/Typescript
+
+Other:  
+  - Other (specify in the description)
