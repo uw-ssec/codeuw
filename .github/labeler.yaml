@@ -9,13 +9,13 @@ L3:
   - 'L3'  
 
 Python:
-  - python
+  - 'python'
 
 Shell:
-  - shell
+  - 'shell'
 
 C/C++:
-  - C/C++
+  - 'C\/C++'
 
 JS/TS:        
-  - Javascript/Typescript
+  - 'Javascript\/Typescript'
