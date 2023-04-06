@@ -1,7 +1,7 @@
 name: CodeUW Task
 description: Create a CodeUW Task
 title: "[Code UW]: "
-labels: ["task", "codeuw"]
+labels: ["Task", "codeuw"]
 body:
   - type: input
     id: contact
