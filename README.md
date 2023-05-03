@@ -26,3 +26,13 @@ By working on these tasks, students have the opportunity to work with SSEC engin
     - **L3**: A step up from L3, likely to take about a week. This type will be either higher coding complexity or have broader scope (ie. multiple modules). 
 - Assign the task to yourself. The expectation is that you'll complete the task within the expected timeline (per level) so make sure you'll be able to devote a few hours a day to this.
 - Email the the task owner (SSEC engineer) to let them know you'll be working on this and to ask any initial questions/clarifications 
+
+## Working on a task
+
+It may be helpful to review [this tutorial]((https://www.dataschool.io/how-to-contribute-on-github/) on how to contribute to open source projects. A typical task workflow is:
+
+- [Fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo) the code repository specified in the task and [clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) it locally.
+- Review the repo's README.md and CONTRIBUTING.md files to understand what is required to run and modify this code. 
+- Create a branch in your local repo to implement the task.
+- Commit your changes to the branch and push it to the remote repo.
+- Create a pull request, adding the task owner as the reviewer.
