@@ -29,7 +29,7 @@ By working on these tasks, students have the opportunity to work with SSEC engin
 
 ## Working on a task
 
-It may be helpful to review [this tutorial]((https://www.dataschool.io/how-to-contribute-on-github/) on how to contribute to open source projects. A typical task workflow is:
+It may be helpful to review [this tutorial](https://www.dataschool.io/how-to-contribute-on-github/) on how to contribute to open source projects. A typical task workflow is:
 
 - [Fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo) the code repository specified in the task and [clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) it locally.
 - Review the repo's README.md and CONTRIBUTING.md files to understand what is required to run and modify this code. 
