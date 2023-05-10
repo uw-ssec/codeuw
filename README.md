@@ -23,7 +23,7 @@ By working on these tasks, students have the opportunity to work with SSEC engin
 - Search through the [list of tasks](https://github.com/uw-ssec/codeuw/issues?q=is%3Aopen+is%3Aissue+label%3ATask) in the repo to find a suitable one. Tasks are categorized in 3 levels:
     - **L1**: Simple task that can be done in a few hours. These tasks have low coding complexity and won't require much project ramp-up time. Great task to practice the life-cycle of a pull request.
     - **L2**: Moderate task which may take a couple of days. Will likely require setting up a virtual environment to run the project and get a good understanding of a portion of it, e.g. a module.
-    - **L3**: A step up from L3, likely to take about a week. This type will be either higher coding complexity or have broader scope (ie. multiple modules). 
+    - **L3**: A step up from L2, likely to take about a week. This type will be either higher coding complexity or have broader scope (ie. multiple modules). 
 - Assign the task to yourself. The expectation is that you'll complete the task within the expected timeline (per level) so make sure you'll be able to devote a few hours a day to this.
 - Email the the task owner (SSEC engineer) to let them know you'll be working on this and to ask any initial questions/clarifications 
 
