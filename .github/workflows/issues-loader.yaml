@@ -2,7 +2,8 @@ name: issues-loader
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    # Run job every hour
+    - cron: 0 */1 * * *
   workflow_dispatch:
     inputs:
       dryRun:
@@ -30,12 +31,15 @@ jobs:
       - name: Run load issues
         run: |
           if [[ "${DRY_RUN}" == "true" ]]; then
+            echo "Running load issues in dry run mode"
             python load_issues.py --dry-run
           else
             echo "Running load issues"
-            # python load_issues.py
+            python load_issues.py
           fi
         env:
+          # if the workflow was triggered by a workflow_dispatch event,
+          # use the value of the dryRun input parameter; otherwise, use 'false'
           DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dryRun || 'false' }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
