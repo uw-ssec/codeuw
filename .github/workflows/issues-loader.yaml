@@ -16,7 +16,7 @@ permissions:
   issues: write
 
 jobs:
-  build:
+  load:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
