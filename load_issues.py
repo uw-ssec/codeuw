@@ -7,6 +7,7 @@ import typer
 import yaml
 
 from github import Github
+from github import Auth
 from github.Issue import Issue
 from github.Repository import Repository
 
@@ -49,8 +50,6 @@ def setup_github() -> Github:
     Github
         Github API object
     """
-    from github import Auth
-
     # using an access token
     # it'll look for environment variable GITHUB_TOKEN
     auth = Auth.Token(os.environ.get("GITHUB_TOKEN"))
@@ -59,27 +58,27 @@ def setup_github() -> Github:
     return Github(auth=auth)
 
 
-def parse_issue_template(source_repo: Repository) -> Dict[str, Any]:
+def parse_issue_template(codeuw_repo: Repository) -> Dict[str, Any]:
     """
-    Parse the issue template from the source repository
+    Parse the issue template from the codeuw repository
     and output a dictionary of the template
 
     Parameters
     ----------
-    source_repo : Repository
-        The source repository to parse the issue template from
+    codeuw_repo : Repository
+        The codeuw repository to parse the issue template from
 
     Returns
     -------
     dict
         The dictionary of the issue template
     """
-    issue_template = source_repo.get_contents(path=".github/ISSUE_TEMPLATE/task.yml")
-    task_template = yaml.safe_load(issue_template.decoded_content)
+    issue_template_content_file = codeuw_repo.get_contents(path=".github/ISSUE_TEMPLATE/task.yml")
+    issue_template = yaml.safe_load(issue_template_content_file.decoded_content)
 
     # Create the body markdown template
     body_template = ""
-    for input in task_template["body"]:
+    for input in issue_template["body"]:
         input_id = input["id"]
         section_string = textwrap.dedent(
             f'### {input["attributes"]["label"]}\n\n' f"{{{input_id}}}\n\n"
@@ -88,8 +87,8 @@ def parse_issue_template(source_repo: Repository) -> Dict[str, Any]:
 
     # Setup the template dictionary
     template_dict = {
-        "title": (task_template["title"] + "{project_name} - {title_text}").format,
-        "labels": task_template["labels"],
+        "title": (issue_template["title"] + "{project_name} - {title_text}").format,
+        "labels": issue_template["labels"],
         "body": body_template.format,
     }
 
@@ -100,9 +99,9 @@ def generate_code_uw_issues(
     issues_with_label: List[Issue],
     template_dict: Dict[str, Any],
     repo: Dict[str, Any],
-    source_issue_titles: List[str],
+    codeuw_issue_titles: List[str],
     gh_repo: Repository,
-    source_repo: Repository,
+    codeuw_repo: Repository,
     dry_run: bool = False,
 ) -> None:
     # Loop over issues and create one by one
@@ -113,8 +112,8 @@ def generate_code_uw_issues(
         )
 
         # Skip the rest if issue already exists
-        if issue_title in source_issue_titles:
-            logger.info(f"Issue already exists in source: {issue_title}")
+        if issue_title in codeuw_issue_titles:
+            logger.info(f"Issue already exists in codeuw repo: {issue_title}")
             continue
 
         issue_template["title"] = issue_title
@@ -131,7 +130,7 @@ def generate_code_uw_issues(
         logger.info(f'Creating issue: {issue_template["title"]}')
         logger.info(f'Labels: {issue_template["labels"]}')
         if not dry_run:
-            created_issue = source_repo.create_issue(**issue_template)
+            created_issue = codeuw_repo.create_issue(**issue_template)
             logger.info(f"Issue successfully created: {created_issue.html_url}")
         else:
             logger.info("Dry run, not creating issue. Here is the issue body:\n")
@@ -142,21 +141,21 @@ def main(config_file: str = ".codeuw-config.yml", dry_run: bool = False):
     """
     Loads "codeuw" labeled issues from Github
     """
-    g = setup_github()
+    gh = setup_github()
     config = load_config(config_file=config_file)
 
-    # Get source repo
-    source_repo = g.get_repo("/".join([config["owner"], config["repo"]]))
+    # Get codeuw repo
+    codeuw_repo = gh.get_repo("/".join([config["owner"], config["repo"]]))
 
-    # Get all issue titles from source repo
-    source_issue_titles = [issue.title for issue in source_repo.get_issues(state="all")]
+    # Get all issue titles from codeuw repo
+    codeuw_issue_titles = [issue.title for issue in codeuw_repo.get_issues(state="all")]
 
     # Get the template dictionary
-    template_dict = parse_issue_template(source_repo)
+    template_dict = parse_issue_template(codeuw_repo)
 
     for repo in config["repos"]:
         repo_path = "/".join([repo["org"], repo["repo"]])
-        gh_repo = g.get_repo(repo_path)
+        gh_repo = gh.get_repo(repo_path)
         # Get issues with codeuw label only
         issues_with_label = [
             issue
@@ -167,9 +166,9 @@ def main(config_file: str = ".codeuw-config.yml", dry_run: bool = False):
             issues_with_label,
             template_dict,
             repo,
-            source_issue_titles,
+            codeuw_issue_titles,
             gh_repo,
-            source_repo,
+            codeuw_repo,
             dry_run,
         )
 
