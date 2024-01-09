@@ -6,5 +6,5 @@ repos:
     org: AutoResearch
     repo: autodoc
   - name: NoisePy
-     org: noisepy
-     repo: NoisePy    
+    org: noisepy
+    repo: NoisePy    

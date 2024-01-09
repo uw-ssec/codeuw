@@ -42,4 +42,10 @@ jobs:
           # use the value of the dryRun input parameter; otherwise, use 'false'
           DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dryRun || 'false' }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit and push changes
+        # Commit all changed files back to the repository
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          # Commit message for the created commit.
+          commit_message: "chore(issues): 🗃️ Updated codeUW issues state file."
     
