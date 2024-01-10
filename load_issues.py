@@ -17,17 +17,18 @@ from github.Repository import Repository
 from loguru import logger
 
 DEFAULT_CONFIG = {"owner": "uw-ssec", "repo": "codeuw", "repos": []}
+DEFAULT_STATE_FILE = ".codeuw-state.mpk"
+DEFAULT_CONFIG_FILE = ".codeuw-config.yml"
 
 
-def load_config(config_file: str = ".codeuw-config.yml") -> Dict[str, Any]:
+def load_config(config_file: str = DEFAULT_CONFIG_FILE) -> Dict[str, Any]:
     """
     Load configuration file
 
     Parameters
     ----------
     config_file : str, optional
-        The string path to configuration file,
-        by default ".codeuw-config.yml"
+        The string path to configuration file
 
     Returns
     -------
@@ -143,7 +144,8 @@ def generate_code_uw_issues(
 
         # Skip the rest if issue already exists
         if issue.number in codeuw_state["issues"][gh_repo.full_name]:
-            logger.info(f"Issue already exists in codeuw repo: {issue_title}")
+            codeuw_issue_number = codeuw_state["issues"][gh_repo.full_name][issue.number]
+            logger.info(f"Issue ({gh_repo.full_name}#{issue.number}) already exists in repo: {codeuw_repo.full_name}#{codeuw_issue_number}")
             continue
 
         issue_template["title"] = issue_title
@@ -170,7 +172,7 @@ def generate_code_uw_issues(
         codeuw_state["last_modified"] = int(time.time())
     return codeuw_state
 
-def get_state(state_file: str = '.codeuw-state.mpk') -> OrderedDict:
+def get_state(state_file: "str | Path" = DEFAULT_STATE_FILE) -> OrderedDict:
     """
     Get the state dictionary from the state file
     """
@@ -188,21 +190,21 @@ def get_state(state_file: str = '.codeuw-state.mpk') -> OrderedDict:
         })
         return codeuw_state
 
-def write_state(state_dict: OrderedDict, state_file: "str | Path" = '.codeuw-state.mpk') -> None:
+def write_state(state_dict: OrderedDict, state_file: "str | Path" = DEFAULT_STATE_FILE) -> None:
     """
     Write state file to disk as messagepack file format
     """
     state_file = Path(state_file)
     state_file.write_bytes(msgpack.packb(state_dict))
     
-def read_state(state_file: "str | Path" = '.codeuw-state.mpk') -> OrderedDict:
+def read_state(state_file: "str | Path" = DEFAULT_STATE_FILE) -> OrderedDict:
     """
     Read state file from disk as messagepack file format
     """
     state_file = Path(state_file)
     return msgpack.unpackb(state_file.read_bytes(), strict_map_key=False)
 
-def main(config_file: str = ".codeuw-config.yml", dry_run: bool = False):
+def main(config_file: str = DEFAULT_CONFIG_FILE, dry_run: bool = False):
     """
     Loads "codeuw" labeled issues from Github
     """
@@ -241,10 +243,17 @@ def main(config_file: str = ".codeuw-config.yml", dry_run: bool = False):
             dry_run,
         )
     
-    logger.info(f"State content:\n {codeuw_state}")
     if not dry_run:
         logger.info("Writing state file to disk")
         write_state(codeuw_state)
+        
+    repos_message = []
+    for repo, issue_numbers in codeuw_state["issues"].items():
+        repos_message.append(f"{repo}: {len(issue_numbers)} issues")
+    repos_message_str = "\n".join(repos_message)
+
+    final_message = textwrap.dedent(f"Issues creation summary:\n{repos_message_str}")
+    logger.info(final_message)
 
 
 if __name__ == "__main__":
