@@ -1,0 +1,51 @@
+name: issues-loader
+
+on:
+  schedule:
+    # Run job every hour
+    - cron: 0 */1 * * *
+  workflow_dispatch:
+    inputs:
+      dryRun:
+        description: 'Flag to run the script without creating issues'
+        default: false
+        required: true
+        type: boolean
+
+permissions:
+  issues: write
+
+jobs:
+  load:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: "pip"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run load issues
+        run: |
+          if [[ "${DRY_RUN}" == "true" ]]; then
+            echo "Running load issues in dry run mode"
+            python load_issues.py --dry-run
+          else
+            echo "Running load issues"
+            python load_issues.py
+          fi
+        env:
+          # if the workflow was triggered by a workflow_dispatch event,
+          # use the value of the dryRun input parameter; otherwise, use 'false'
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dryRun || 'false' }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit and push changes
+        # Commit all changed files back to the repository
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          # Commit message for the created commit.
+          commit_message: "chore(issues): 🗃️ Updated codeUW issues state file."
+    

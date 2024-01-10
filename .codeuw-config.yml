@@ -1,0 +1,10 @@
+repos:
+  - name: Caustics # Custom name of this repository
+    org: uw-ssec # The Github organization name, NOT display name
+    repo: caustics # The Github repository to pull from
+  - name: Autodoc
+    org: AutoResearch
+    repo: autodoc
+  - name: NoisePy
+    org: noisepy
+    repo: NoisePy    
