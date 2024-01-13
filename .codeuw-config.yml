@@ -7,4 +7,7 @@ repos:
     repo: autodoc
   - name: NoisePy
     org: noisepy
-    repo: NoisePy    
+    repo: NoisePy  
+  - name: GNATSS
+    org: seafloor-geodesy
+    repo: gnatss
